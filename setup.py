@@ -20,6 +20,8 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 # via https://pytest.org/latest/goodpractises.html
+
+
 class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
 
@@ -33,7 +35,7 @@ class PyTest(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
-        #import here, cause outside the eggs aren't loaded
+        # import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
@@ -55,19 +57,19 @@ test_requirements = [
 ]
 
 setup(
-    name='pyLDAvis',
-    version='2.1.3',
-    description="Interactive topic model visualization. Port of the R package.",
+    name='Twitter_pyLDAvis',
+    version='1.0.0',
+    description="Interactive topic model visualization. Extension of the Python package pyLDAvis.",
     long_description=readme + '\n\n' + history,
-    author="Ben Mabey",
-    author_email='ben@benmabey.com',
-    url='https://github.com/bmabey/pyLDAvis',
-    download_url = 'https://github.com/bmabey/pyLDAvis/tarball/2.1.2',
+    author="Felipe González & Ignacio Tampe",
+    author_email='felipe.gonzalezp.12@sansano.usm.cl',
+    url='https://github.com/gonzalezf/pyLDAvis',
+    download_url='https://github.com/bmabey/pyLDAvis/tarball/2.1.2',
     packages=[
-        'pyLDAvis',
+        'Twitter_pyLDAvis',
     ],
-    package_dir={'pyLDAvis':
-                 'pyLDAvis'},
+    package_dir={'Twitter_pyLDAvis':
+                 'Twitter_pyLDAvis'},
     include_package_data=True,
     install_requires=requirements,
     license="MIT",
@@ -88,5 +90,5 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    cmdclass = {'test': PyTest}
+    cmdclass={'test': PyTest}
 )
