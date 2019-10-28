@@ -17,23 +17,24 @@ LOCAL_JS_DIR = os.path.join(__path__[0], "js")
 D3_LOCAL = os.path.join(LOCAL_JS_DIR, "d3.v3.min.js")
 
 if DEV:
-    WWW_JS_DIR = "https://rawgit.com/bmabey/pyLDAvis/master/pyLDAvis/js/"
+    WWW_JS_DIR = "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/grynqsphwqoi/b/twitter_pyldavis/o/"
     LDAVIS_URL = WWW_JS_DIR + "ldavis.js"
     LDAVIS_CSS_URL = WWW_JS_DIR + "ldavis.css"
-
+    LDAVIS_TWEET_CSS_URL = WWW_JS_DIR + "tweet.css"
     LDAVIS_LOCAL = os.path.join(LOCAL_JS_DIR, "ldavis.js")
 
     LDAVIS_CSS_LOCAL = os.path.join(LOCAL_JS_DIR, "ldavis.css")
 else:
-    WWW_JS_DIR = "https://cdn.rawgit.com/bmabey/pyLDAvis/files/"
+    WWW_JS_DIR = "https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/grynqsphwqoi/b/twitter_pyldavis/o/"
     JS_VERSION = '1.0.0'
     CSS_VERSION = '1.0.0'
 
-    LDAVIS_URL = WWW_JS_DIR + "ldavis.v{0}.js".format(JS_VERSION)
+    LDAVIS_URL = WWW_JS_DIR + "ldavis.js".format(JS_VERSION)
+    LDAVIS_TWEET_CSS_URL = WWW_JS_DIR + "tweet.css"
     LDAVIS_CSS_URL = WWW_JS_DIR + "ldavis.v{0}.css".format(CSS_VERSION)
 
     LDAVIS_LOCAL = os.path.join(LOCAL_JS_DIR,
-                                "ldavis.v{0}.js".format(JS_VERSION))
+                                "ldavis.js".format(JS_VERSION))
 
     LDAVIS_CSS_LOCAL = os.path.join(LOCAL_JS_DIR,
                                     "ldavis.v{0}.css".format(CSS_VERSION))
