@@ -23,8 +23,26 @@ SIMPLE_HTML = jinja2.Template("""
 <script type="text/javascript" src="{{ d3_url }}"></script>
 <script type="text/javascript" src="{{ ldavis_url }}"></script>
 <link rel="stylesheet" type="text/css" href="{{ ldavis_css_url }}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <div id={{ visid }}></div>
+
+<h2>Tweets más relevantes</h2>
+<div id="tweet_div"></div>
+<table border="1" id="tweets">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Cntribución</th>
+      <th>Texto</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
+
 <script type="text/javascript">
    !function(LDAvis){
        new LDAvis("#" + {{ visid }}, {{ vis_json }}, {{tweets_json}});
@@ -38,8 +56,27 @@ SIMPLE_HTML = jinja2.Template("""
 REQUIREJS_HTML = jinja2.Template("""
 
 <link rel="stylesheet" type="text/css" href="{{ ldavis_css_url }}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <div id={{ visid }}></div>
+
+<h2>Tweets más relevantes</h2>
+<div id="tweet_div"></div>
+<table border="1" id="tweets">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Cntribución</th>
+      <th>Texto</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
+
+
 <script type="text/javascript">
 
 var {{ visid_raw }}_data = {{ vis_json }};
@@ -48,7 +85,7 @@ var {{ visid_raw }}_tweets = {{ tweets_json }};
 
 if(typeof(window.LDAvis) !== "undefined"){
    !function(LDAvis){
-       new LDAvis("#" + {{ visid }}, {{ visid_raw }}_data);
+       new LDAvis("#" + {{ visid }}, {{ visid_raw }}_data, {{ visid_raw }}_tweets);
    }(LDAvis);
 }else{
   require.config({paths: {d3: "{{ d3_url[:-3] }}"}});
@@ -68,9 +105,28 @@ if(typeof(window.LDAvis) !== "undefined"){
 # HTML page.
 GENERAL_HTML = jinja2.Template("""
 <link rel="stylesheet" type="text/css" href="{{ ldavis_css_url }}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 
 <div id={{ visid }}></div>
+
+<h2>Tweets más relevantes</h2>
+<div id="tweet_div"></div>
+<table border="1" id="tweets">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Cntribución</th>
+      <th>Texto</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
+
+
 <script type="text/javascript">
 
 var {{ visid_raw }}_data = {{ vis_json }};
@@ -116,7 +172,7 @@ TEMPLATE_DICT = {"simple": SIMPLE_HTML,
                  "general": GENERAL_HTML}
 
 
-def prepared_data_to_html(data, tweets, d3_url=None, ldavis_url=None, ldavis_css_url=None,
+def prepared_data_to_html(data, tweets, d3_url=None, ldavis_url=None, ldavis_css_url=None, ldavis_tweet_css_url=None,
                           template_type="general", visid=None, use_http=False):
     """Output HTML with embedded visualization
 
@@ -166,13 +222,14 @@ def prepared_data_to_html(data, tweets, d3_url=None, ldavis_url=None, ldavis_css
     d3_url = d3_url or urls.D3_URL
     ldavis_url = ldavis_url or urls.LDAVIS_URL
     ldavis_css_url = ldavis_css_url or urls.LDAVIS_CSS_URL
+    ldavis_tweet_css_url = ldavis_tweet_css_url or urls.LDAVIS_TWEET_CSS_URL
 
     if use_http:
         d3_url = d3_url.replace('https://', 'http://')
         ldavis_url = ldavis_url.replace('https://', 'http://')
 
     if visid is None:
-        visid = 'ldavis_' + get_id(data) + str(int(random.random() * 1E10))
+        visid = 'ldavis_' + get_id(data) + str(int(random.random() * 1E5))
     elif re.search('\s', visid):
         raise ValueError("visid must not contain spaces")
 
@@ -182,7 +239,8 @@ def prepared_data_to_html(data, tweets, d3_url=None, ldavis_url=None, ldavis_css
                            ldavis_url=ldavis_url,
                            vis_json=data.to_json(),
                            tweets_json=tweets,
-                           ldavis_css_url=ldavis_css_url)
+                           ldavis_css_url=ldavis_css_url,
+                           ldavis_tweet_url=ldavis_tweet_css_url)
 
 
 def display(data, tweets, local=False, **kwargs):
@@ -318,7 +376,7 @@ def enable_notebook(local=False, **kwargs):
     ip = get_ipython()
     formatter = ip.display_formatter.formatters['text/html']
     formatter.for_type(PreparedData,
-                       lambda data, kwds=kwargs: prepared_data_to_html(data, **kwds))
+                       lambda data, tweets, kwds=kwargs: prepared_data_to_html(data, tweets, **kwds))
 
 
 def disable_notebook():
